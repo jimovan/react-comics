@@ -1,12 +1,36 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import md5 from "md5";
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [characters, setCharacters] = useState<any[]>([]);
 
-  const testKey = import.meta.env.VITE_TEST_KEY;
+  const publicKey = import.meta.env.VITE_PUBLIC_KEY;
+  const privateKey = import.meta.env.VITE_PRIVATE_KEY;
+
+  async function getCharaterData() {
+    console.log("calling characters");
+    setCharacters([]);
+
+    let timeStamp = new Date().getTime();
+    let hash = generateHash(timeStamp);
+
+    let url = `http://gateway.marvel.com/v1/public/characters?ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&limit=10`
+
+    let response = await fetch(url);
+    let data = await response.json();
+
+    setCharacters(data.data.results);
+
+    console.log(characters);
+  }
+
+  function generateHash(timeStamp: number) {
+    return md5(timeStamp + privateKey + publicKey);
+  }
 
   return (
     <>
@@ -19,18 +43,19 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <h2>{testKey}</h2>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <button onClick={() => getCharaterData()}>Get Characters</button>
+
+      <h2>Characters</h2>
+      {characters && characters[0] && (
+        <ul>
+          {characters.map(c =>
+            <li key={c.id}>
+              {c.name}
+            </li>
+          )}
+        </ul>
+      )}
     </>
   )
 }
