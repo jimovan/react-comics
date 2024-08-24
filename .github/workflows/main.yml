@@ -40,7 +40,8 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_TEST_KEY: ${{ secrets.VITE_TEST_KEY }}
+          VITE_PUBLIC_KEY: ${{ secrets.VITE_PUBLIC_KEY }}
+          VITE_PRIVATE_KEY: ${{ secrets.VITE_PRIVATE_KEY }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
