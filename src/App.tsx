@@ -5,7 +5,6 @@ import md5 from "md5";
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
   const [characters, setCharacters] = useState<any[]>([]);
 
   const publicKey = import.meta.env.VITE_PUBLIC_KEY;
