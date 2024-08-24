@@ -17,7 +17,7 @@ function App() {
     let timeStamp = new Date().getTime();
     let hash = generateHash(timeStamp);
 
-    let url = `http://gateway.marvel.com/v1/public/characters?ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&limit=10`
+    let url = `https://gateway.marvel.com/v1/public/characters?ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&limit=10`
 
     let response = await fetch(url);
     let data = await response.json();
