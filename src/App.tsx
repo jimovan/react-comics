@@ -1,34 +1,21 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import md5 from "md5";
 import './App.css'
+import * as MarvelService from './marvelService.ts'
 
 function App() {
   const [characters, setCharacters] = useState<any[]>([]);
-
-  const publicKey = import.meta.env.VITE_PUBLIC_KEY;
-  const privateKey = import.meta.env.VITE_PRIVATE_KEY;
 
   async function getCharaterData() {
     console.log("calling characters");
     setCharacters([]);
 
-    let timeStamp = new Date().getTime();
-    let hash = generateHash(timeStamp);
+    let results = await MarvelService.getCharacters()
 
-    let url = `https://gateway.marvel.com/v1/public/characters?ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&limit=10`
-
-    let response = await fetch(url);
-    let data = await response.json();
-
-    setCharacters(data.data.results);
+    setCharacters(results);
 
     console.log(characters);
-  }
-
-  function generateHash(timeStamp: number) {
-    return md5(timeStamp + privateKey + publicKey);
   }
 
   return (
